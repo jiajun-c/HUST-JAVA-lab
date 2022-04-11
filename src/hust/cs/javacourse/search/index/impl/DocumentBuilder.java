@@ -5,12 +5,14 @@ import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
 import hust.cs.javacourse.search.index.AbstractTermTuple;
 import hust.cs.javacourse.search.parse.AbstractTermTupleScanner;
 import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
+import hust.cs.javacourse.search.parse.impl.LengthTermTupleFilter;
+import hust.cs.javacourse.search.parse.impl.PattenTermTupleFilter;
+import hust.cs.javacourse.search.parse.impl.StopWordTermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.TermTupleScanner;
 
 import java.io.*;
 
 public class DocumentBuilder extends AbstractDocumentBuilder{
-
     @Override
     public AbstractDocument build(int docId, String docPath, AbstractTermTupleStream termTupleStream) throws IOError, IOException {
         // Using the IOError to catch the I/O error
@@ -31,10 +33,14 @@ public class DocumentBuilder extends AbstractDocumentBuilder{
         AbstractTermTupleStream ts = null; // Add the tuple according to the file
         try {
             ts = new TermTupleScanner(new BufferedReader(new InputStreamReader(new FileInputStream(file))));
-        } catch (FileNotFoundException e) {
+            ts = new StopWordTermTupleFilter(ts);
+            ts = new LengthTermTupleFilter(ts);
+            ts = new PattenTermTupleFilter(ts);
+            document = build(docId,docPath,ts);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        // The pre work of it is the parse, so we need to build it first
+        // The pre_work of it is the parse, so we need to build it first
         return document;
     }
 }

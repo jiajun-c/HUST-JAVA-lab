@@ -20,7 +20,8 @@ public abstract class AbstractTermTupleFilter extends AbstractTermTupleStream{
     /**
      * 构造函数
      * @param input：Filter的输入，类型为AbstractTermTupleStream
-     *return null;/
+     *return null;
+     */
     public AbstractTermTupleFilter(AbstractTermTupleStream input){
         this.input = input;
     }
