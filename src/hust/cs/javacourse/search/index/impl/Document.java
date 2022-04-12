@@ -40,7 +40,7 @@ public class Document extends AbstractDocument{
     @Override
     public void addTuple(AbstractTermTuple tuple) {
         if(contains(tuple)) return;
-        addTuple(tuple);
+        this.tuples.add(tuple);
     }
 
     @Override

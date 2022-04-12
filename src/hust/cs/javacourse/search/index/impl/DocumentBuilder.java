@@ -3,7 +3,6 @@ package hust.cs.javacourse.search.index.impl;
 import hust.cs.javacourse.search.index.AbstractDocument;
 import hust.cs.javacourse.search.index.AbstractDocumentBuilder;
 import hust.cs.javacourse.search.index.AbstractTermTuple;
-import hust.cs.javacourse.search.parse.AbstractTermTupleScanner;
 import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
 import hust.cs.javacourse.search.parse.impl.LengthTermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.PattenTermTupleFilter;
@@ -33,12 +32,15 @@ public class DocumentBuilder extends AbstractDocumentBuilder{
         AbstractTermTupleStream ts = null; // Add the tuple according to the file
         try {
             ts = new TermTupleScanner(new BufferedReader(new InputStreamReader(new FileInputStream(file))));
-            ts = new StopWordTermTupleFilter(ts);
-            ts = new LengthTermTupleFilter(ts);
-            ts = new PattenTermTupleFilter(ts);
+            ts = new StopWordTermTupleFilter(ts); //The stop words
+            ts = new LengthTermTupleFilter(ts);    // The length of the word
+            ts = new PattenTermTupleFilter(ts);     // The rgx
             document = build(docId,docPath,ts);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            ts.close();
         }
         // The pre_work of it is the parse, so we need to build it first
         return document;
